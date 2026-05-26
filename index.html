@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarkom — Client Proxy Server</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg: #0e0e0e;
+        --surface: #161616;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --text: #f0f0f0;
+        --muted: #666;
+        --accent: #ff6b35;
+        --accent2: #ffd166;
+        --green: #06d6a0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 48px;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .nav-logo {
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+      .nav-links a {
+        font-size: 13px;
+        color: var(--muted);
+        text-decoration: none;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      /* HERO */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: calc(100vh - 65px);
+      }
+
+      .hero-left {
+        padding: 80px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid var(--border);
+      }
+
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        margin-bottom: 32px;
+        width: fit-content;
+      }
+
+      .hero-tag .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      h1 {
+        font-size: clamp(40px, 5vw, 72px);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        margin-bottom: 24px;
+      }
+
+      h1 .line1 {
+        color: var(--text);
+        display: block;
+      }
+      h1 .line2 {
+        color: var(--accent);
+        display: block;
+      }
+      h1 .line3 {
+        color: var(--muted);
+        font-weight: 300;
+        display: block;
+      }
+
+      .hero-desc {
+        font-size: 15px;
+        line-height: 1.8;
+        color: var(--muted);
+        max-width: 400px;
+        margin-bottom: 48px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 14px 28px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
+      .btn-primary:hover {
+        opacity: 0.85;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+        padding: 14px 28px;
+        font-family: "Space Grotesk", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 0.2s;
+      }
+      .btn-secondary:hover {
+        border-color: var(--muted);
+      }
+
+      /* HERO RIGHT — dashboard panel */
+      .hero-right {
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .panel-title {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      /* STATUS CARDS */
+      .status-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .status-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+
+      .status-card .s-label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      .status-card .s-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .status-card .s-value.orange {
+        color: var(--accent);
+      }
+      .status-card .s-value.yellow {
+        color: var(--accent2);
+      }
+      .status-card .s-value.green {
+        color: var(--green);
+      }
+
+      .status-card .s-sub {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* TOPOLOGY */
+      .topology {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+      }
+
+      .topo-nodes {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .topo-node {
+        flex: 1;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px 10px;
+        text-align: center;
+      }
+
+      .topo-node.highlight {
+        border-color: var(--accent);
+      }
+
+      .topo-node .n-ip {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .topo-node .n-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .topo-node .n-port {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--accent);
+      }
+
+      .topo-node.highlight .n-name {
+        color: var(--accent);
+      }
+
+      .topo-arrow {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--border);
+        white-space: nowrap;
+        flex-shrink: 0;
+        text-align: center;
+      }
+
+      .topo-arrow span {
+        display: block;
+        font-size: 9px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* LOG */
+      .log-panel {
+        background: #0a0a0a;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .log-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .log-header .circles {
+        display: flex;
+        gap: 6px;
+      }
+      .log-header .c {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .log-header .cr {
+        background: #ff5f57;
+      }
+      .log-header .cy {
+        background: #febc2e;
+      }
+      .log-header .cg {
+        background: #28c840;
+      }
+
+      .log-header .log-name {
+        margin-left: auto;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .log-body {
+        padding: 16px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        line-height: 2;
+        color: var(--muted);
+      }
+
+      .log-body .lc {
+        color: #4a9eff;
+      }
+      .log-body .lp {
+        color: var(--accent2);
+      }
+      .log-body .ls {
+        color: var(--green);
+      }
+      .log-body .lx {
+        color: var(--accent);
+      }
+      .log-body .cursor {
+        color: var(--green);
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* SECTION — FITUR */
+      .section {
+        padding: 80px 48px;
+        border-top: 1px solid var(--border);
+      }
+
+      .section-label {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--accent);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      .section h2 {
+        font-size: clamp(28px, 3vw, 42px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 48px;
+        color: var(--text);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .feature-item {
+        background: var(--bg);
+        padding: 36px 28px;
+        transition: background 0.2s;
+      }
+
+      .feature-item:hover {
+        background: var(--surface);
+      }
+
+      .feature-num {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .feature-item h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+      }
+
+      .feature-item p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      /* TEAM */
+      .team-section {
+        padding: 80px 48px;
+        border-top: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 48px;
+      }
+
+      .team-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        transition: border-color 0.2s;
+      }
+
+      .team-card:hover {
+        border-color: var(--accent);
+      }
+
+      .team-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+
+      .team-card .t-role {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--accent);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .team-card .t-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .team-card .t-nim {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* FOOTER */
+      footer {
+        padding: 28px 48px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      footer p {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      footer a {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          padding: 16px 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .hero-left {
+          padding: 48px 20px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .hero-right {
+          padding: 28px 20px;
+        }
+        .status-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .section {
+          padding: 48px 20px;
+        }
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+        .team-section {
+          padding: 48px 20px;
+        }
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          padding: 20px;
+          flex-direction: column;
+          gap: 8px;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">JARKOM_TUBES_03</div>
+      <div class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#fitur">Fitur</a>
+        <a href="#tim">Tim</a>
+        <a href="/page.html">Page 2</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-left">
+        <div class="hero-tag">
+          <span class="dot"></span>
+          System Online — Port 8000
+        </div>
+        <h1>
+          <span class="line1">Client</span>
+          <span class="line2">Proxy</span>
+          <span class="line3">Server</span>
+        </h1>
+        <p class="hero-desc">
+          Implementasi sistem jaringan terdistribusi berbasis socket Python.
+          Seluruh komunikasi HTTP melewati proxy server sebelum sampai ke web
+          server.
+        </p>
+        <div class="hero-buttons">
+          <a href="#fitur" class="btn-primary">Lihat Arsitektur</a>
+          <a href="/page.html" class="btn-secondary">Buka Page 2 →</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="panel-title">System Status</div>
+
+        <div class="status-row">
+          <div class="status-card">
+            <div class="s-label">HTTP</div>
+            <div class="s-value green">ONLINE</div>
+            <div class="s-sub">Port 8000</div>
+          </div>
+          <div class="status-card">
+            <div class="s-label">Proxy</div>
+            <div class="s-value orange">ACTIVE</div>
+            <div class="s-sub">Port 8080</div>
+          </div>
+          <div class="status-card">
+            <div class="s-label">UDP Echo</div>
+            <div class="s-value yellow">READY</div>
+            <div class="s-sub">Port 9000</div>
+          </div>
+        </div>
+
+        <div class="topology">
+          <div class="panel-title">Topologi Jaringan</div>
+          <div class="topo-nodes">
+            <div class="topo-node">
+              <div class="n-ip">192.168.1.12</div>
+              <div class="n-name">Client</div>
+              <div class="n-port">Laptop C</div>
+            </div>
+            <div class="topo-arrow">──TCP──▶<span>:8080</span></div>
+            <div class="topo-node highlight">
+              <div class="n-ip">192.168.1.11</div>
+              <div class="n-name">Proxy</div>
+              <div class="n-port">Laptop B</div>
+            </div>
+            <div class="topo-arrow">──TCP──▶<span>:8000</span></div>
+            <div class="topo-node">
+              <div class="n-ip">192.168.1.10</div>
+              <div class="n-name">Server</div>
+              <div class="n-port">Laptop A</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="log-panel">
+          <div class="log-header">
+            <div class="circles">
+              <span class="c cr"></span>
+              <span class="c cy"></span>
+              <span class="c cg"></span>
+            </div>
+            <span class="log-name">webserver.log</span>
+          </div>
+          <div class="log-body">
+            <div>
+              <span class="ls">[HTTP]</span> Server running on port 8000
+            </div>
+            <div>
+              <span class="ls">[UDP]</span> Echo server running on port 9000
+            </div>
+            <div><span class="lc">[REQ]</span> GET /index.html from proxy</div>
+            <div>
+              <span class="lp">[CACHE]</span> MISS — forwarding to webserver
+            </div>
+            <div>
+              <span class="ls">[200]</span> index.html served (4096 bytes)
+            </div>
+            <div class="cursor">█</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FITUR -->
+    <section class="section" id="fitur">
+      <div class="section-label">Arsitektur Sistem</div>
+      <h2>Tiga Komponen Utama</h2>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-num">01 —</div>
+          <h3>Web Server</h3>
+          <p>
+            Melayani HTTP request dari proxy, menyajikan file HTML statis, dan
+            menjalankan UDP echo server untuk pengujian QoS jaringan.
+          </p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">02 —</div>
+          <h3>Proxy Server</h3>
+          <p>
+            Menjadi perantara seluruh komunikasi HTTP. Mengimplementasikan cache
+            HIT dan MISS, forwarding request, dan multithreading.
+          </p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-num">03 —</div>
+          <h3>Client</h3>
+          <p>
+            Mengirim HTTP GET lewat proxy dan menjalankan pengujian QoS UDP
+            untuk mengukur RTT, jitter, packet loss, dan throughput.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIM -->
+    <section class="team-section" id="tim">
+      <div class="section-label">Anggota Kelompok</div>
+      <h2>Tim Pengembang</h2>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">SF</div>
+          <div class="t-role">Proxy Server Dev</div>
+          <div class="t-name">Shafa Farel Azka</div>
+          <div class="t-nim">1031124300259</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">FA</div>
+          <div class="t-role">Web Server Dev</div>
+          <div class="t-name">Faiz Az-Zahra Winanto Putra</div>
+          <div class="t-nim">103112430001</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">AR</div>
+          <div class="t-role">Client & Testing</div>
+          <div class="t-name">Abyan Rahman Alfariz</div>
+          <div class="t-nim">103112430021</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>&copy; 2026 Tubes Jaringan Komputer — Kelompok 3</p>
+      <a href="/page.html">page.html →</a>
+    </footer>
+  </body>
+</html>
