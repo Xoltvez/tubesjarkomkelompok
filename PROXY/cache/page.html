@@ -1,0 +1,660 @@
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 17051
+Connection: close
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page 2 — Jarkom</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg: #0e0e0e;
+        --surface: #161616;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --text: #f0f0f0;
+        --muted: #666;
+        --accent: #ff6b35;
+        --accent2: #ffd166;
+        --green: #06d6a0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 48px;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .nav-logo {
+        font-family: "Space Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+      .nav-links a {
+        font-size: 13px;
+        color: var(--muted);
+        text-decoration: none;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-links a.active {
+        color: var(--accent);
+      }
+
+      /* HERO */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: calc(100vh - 65px);
+      }
+
+      .hero-left {
+        padding: 80px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid var(--border);
+      }
+
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        margin-bottom: 32px;
+        width: fit-content;
+      }
+
+      .hero-tag .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      h1 {
+        font-size: clamp(40px, 5vw, 72px);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        margin-bottom: 24px;
+      }
+
+      h1 .line1 {
+        color: var(--text);
+        display: block;
+      }
+      h1 .line2 {
+        color: var(--accent);
+        display: block;
+      }
+      h1 .line3 {
+        color: var(--muted);
+        font-weight: 300;
+        display: block;
+      }
+
+      .hero-desc {
+        font-size: 15px;
+        line-height: 1.8;
+        color: var(--muted);
+        max-width: 400px;
+        margin-bottom: 48px;
+      }
+
+      .btn-primary {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 14px 28px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+        width: fit-content;
+      }
+      .btn-primary:hover {
+        opacity: 0.85;
+      }
+
+      /* HERO RIGHT */
+      .hero-right {
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .panel-title {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      /* FLOW CARDS */
+      .flow-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .flow-step {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: border-color 0.2s;
+      }
+
+      .flow-step:hover {
+        border-color: var(--accent);
+      }
+      .flow-step.active {
+        border-color: var(--accent);
+        background: var(--surface2);
+      }
+
+      .step-num {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        width: 24px;
+        flex-shrink: 0;
+      }
+
+      .flow-step.active .step-num {
+        color: var(--accent);
+      }
+
+      .step-info {
+        flex: 1;
+      }
+
+      .step-info .s-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 2px;
+      }
+
+      .step-info .s-desc {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .step-badge {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        padding: 4px 10px;
+        border-radius: 100px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .step-badge.miss {
+        border-color: var(--accent2);
+        color: var(--accent2);
+      }
+      .step-badge.ok {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .step-badge.fwd {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* STATS */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+
+      .stat-card .s-label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      .stat-card .s-value {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .s-value.orange {
+        color: var(--accent);
+      }
+      .s-value.yellow {
+        color: var(--accent2);
+      }
+      .s-value.green {
+        color: var(--green);
+      }
+      .s-value.white {
+        color: var(--text);
+      }
+
+      /* LOG */
+      .log-panel {
+        background: #0a0a0a;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .log-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .log-header .circles {
+        display: flex;
+        gap: 6px;
+      }
+      .log-header .c {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .log-header .cr {
+        background: #ff5f57;
+      }
+      .log-header .cy {
+        background: #febc2e;
+      }
+      .log-header .cg {
+        background: #28c840;
+      }
+      .log-header .log-name {
+        margin-left: auto;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .log-body {
+        padding: 16px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        line-height: 2;
+        color: var(--muted);
+      }
+
+      .log-body .lc {
+        color: #4a9eff;
+      }
+      .log-body .lp {
+        color: var(--accent2);
+      }
+      .log-body .ls {
+        color: var(--green);
+      }
+      .log-body .lx {
+        color: var(--accent);
+      }
+      .log-body .cursor {
+        color: var(--green);
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* SECTION BAWAH */
+      .section {
+        padding: 80px 48px;
+        border-top: 1px solid var(--border);
+      }
+
+      .section-label {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--accent);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      .section h2 {
+        font-size: clamp(28px, 3vw, 42px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 48px;
+        color: var(--text);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .info-item {
+        background: var(--bg);
+        padding: 36px 28px;
+        transition: background 0.2s;
+      }
+
+      .info-item:hover {
+        background: var(--surface);
+      }
+
+      .info-num {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .info-item h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+      }
+
+      .info-item p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      /* FOOTER */
+      footer {
+        padding: 28px 48px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      footer p {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      footer a {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          padding: 16px 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .hero-left {
+          padding: 48px 20px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .hero-right {
+          padding: 28px 20px;
+        }
+        .stats-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .section {
+          padding: 48px 20px;
+        }
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          padding: 20px;
+          flex-direction: column;
+          gap: 8px;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">JARKOM_TUBES_03</div>
+      <div class="nav-links">
+        <a href="/index.html">Home</a>
+        <a href="/index.html#fitur">Fitur</a>
+        <a href="/index.html#tim">Tim</a>
+        <a href="/page.html" class="active">Page 2</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hero-tag">
+          <span class="dot"></span>
+          page.html — Via Proxy :8080
+        </div>
+        <h1>
+          <span class="line1">Halaman</span>
+          <span class="line2">Kedua</span>
+          <span class="line3">page.html</span>
+        </h1>
+        <p class="hero-desc">
+          File ini berhasil di-serve oleh
+          <strong style="color: var(--text)">Web Server</strong> dan diteruskan
+          melalui <strong style="color: var(--text)">Proxy Server</strong>.
+          Semua request HTTP wajib melewati proxy sebelum sampai ke server.
+        </p>
+        <a href="/index.html" class="btn-primary">← Kembali ke Home</a>
+      </div>
+
+      <div class="hero-right">
+        <div class="panel-title">Alur Request</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">01</div>
+            <div class="step-info">
+              <div class="s-title">Client</div>
+              <div class="s-desc">GET /page.html → :8080</div>
+            </div>
+            <div class="step-badge">TCP</div>
+          </div>
+          <div class="flow-step active">
+            <div class="step-num">02</div>
+            <div class="step-info">
+              <div class="s-title">Proxy</div>
+              <div class="s-desc">Cek cache → tidak ditemukan</div>
+            </div>
+            <div class="step-badge miss">MISS</div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">03</div>
+            <div class="step-info">
+              <div class="s-title">Forward</div>
+              <div class="s-desc">Proxy → WebServer :8000</div>
+            </div>
+            <div class="step-badge fwd">FWD</div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">04</div>
+            <div class="step-info">
+              <div class="s-title">Response</div>
+              <div class="s-desc">200 OK — page.html dikirim</div>
+            </div>
+            <div class="step-badge ok">200 OK</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="s-label">Status</div>
+            <div class="s-value green">200 OK</div>
+          </div>
+          <div class="stat-card">
+            <div class="s-label">Cache</div>
+            <div class="s-value yellow">MISS</div>
+          </div>
+          <div class="stat-card">
+            <div class="s-label">Method</div>
+            <div class="s-value white">GET</div>
+          </div>
+        </div>
+
+        <div class="log-panel">
+          <div class="log-header">
+            <div class="circles">
+              <span class="c cr"></span>
+              <span class="c cy"></span>
+              <span class="c cg"></span>
+            </div>
+            <span class="log-name">proxy.log — page.html</span>
+          </div>
+          <div class="log-body">
+            <div>
+              <span class="lc">[PROXY]</span> Koneksi dari client diterima
+            </div>
+            <div><span class="lp">[CACHE]</span> MISS → /page.html</div>
+            <div><span class="lx">[FWD]</span> Forward ke webserver :8000</div>
+            <div>
+              <span class="ls">[200]</span> Response diterima dari server
+            </div>
+            <div><span class="lp">[CACHE]</span> Disimpan ke cache/</div>
+            <div><span class="ls">[OK]</span> Dikirim ke client ✓</div>
+            <div class="cursor">█</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFO SECTION -->
+    <section class="section">
+      <div class="section-label">Tentang Halaman Ini</div>
+      <h2>Cara Kerja Cache</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-num">01 —</div>
+          <h3>Cache MISS</h3>
+          <p>
+            Request pertama ke
+            <code
+              style="
+                color: var(--accent);
+                font-family: &quot;Space Mono&quot;, monospace;
+                font-size: 12px;
+              "
+              >/page.html</code
+            >
+            selalu MISS karena belum tersimpan. Proxy meneruskan ke webserver.
+          </p>
+        </div>
+        <div class="info-item">
+          <div class="info-num">02 —</div>
+          <h3>Cache HIT</h3>
+          <p>
+            Request berikutnya akan langsung dilayani dari cache proxy tanpa
+            menghubungi webserver lagi. Lebih cepat.
+          </p>
+        </div>
+        <div class="info-item">
+          <div class="info-num">03 —</div>
+          <h3>Multithreading</h3>
+          <p>
+            Proxy dan webserver membuat thread baru untuk setiap koneksi masuk,
+            sehingga banyak client bisa dilayani bersamaan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>&copy; 2026 Tubes Jaringan Komputer — Kelompok 3</p>
+      <a href="/index.html">← index.html</a>
+    </footer>
+  </body>
+</html>
